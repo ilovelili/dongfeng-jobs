@@ -1,0 +1,31 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: menu-upload
+spec:
+  # fires at 07:00 and 08:00 on Sundays JST => 22:00 and 23:00 on Saturdays UTC
+  schedule: "0 22,23 * * 6"
+  concurrencyPolicy: Forbid
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app: dongfeng-jobs
+            task: menu-upload
+        spec:
+          restartPolicy: OnFailure
+          activeDeadlineSeconds: 100
+          containers:
+          - name: menu-upload
+            image: ilovelili/dongfeng-jobs:latest
+            env:
+            - name: DF_ENVIROMENT
+              value: dev
+            - name: MICRO_REGISTRY
+              value: kubernetes
+            command: [
+              "./server",
+            ]
+            args:
+            - "menu-upload"

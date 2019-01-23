@@ -1,0 +1,30 @@
+FROM golang:1.11 as builder
+
+LABEL maintainer="<route666@live.cn>"
+
+ENV SRC_DIR=/go/src/dongfeng/dongfeng-jobs
+WORKDIR $SRC_DIR
+
+COPY . $SRC_DIR
+
+# Go dep
+RUN go get -u github.com/golang/dep/cmd/dep
+RUN dep ensure
+
+WORKDIR $SRC_DIR/services/server
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o server .
+
+FROM alpine
+
+LABEL maintainer="<route666@live.cn>"
+
+ENV BUILDER_DIR=/go/src/dongfeng/dongfeng-jobs/services/server
+RUN apk --no-cache add ca-certificates tzdata
+
+ENV CONTAINER_TIMEZONE Asia/Beijing
+# https://wiki.alpinelinux.org/wiki/Setting_the_timezone
+RUN echo $CONTAINER_TIMEZONE >/etc/timezone && \
+    ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime
+
+WORKDIR /root/
+COPY --from=builder $BUILDER_DIR/config.*.json $BUILDER_DIR/server /root/
