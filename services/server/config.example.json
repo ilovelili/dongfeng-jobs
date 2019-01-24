@@ -1,17 +1,19 @@
 {
-    "mysql": {
-        "core": {
-            "host": "mysql:3306",
-            "database": "database",
-            "user": "user",
-            "password": "password",
-            "allow_debug": true
+    "services": {  
+        "mysql": {
+            "core": {
+                "host": "mysql:3306",
+                "database": "database",
+                "user": "user",
+                "password": "password",
+                "allow_debug": true
+            }
         }
     },
-    "service_discovery": {
+    "servicenames": {        
         "core_server": "dongfeng.svc.core.server.api"
     },
-    "metadata": {
+    "servicemeta": {
         "registry_ttl": 30,
         "registry_heartbeat": 10,
         "api_version": "0.0.1",

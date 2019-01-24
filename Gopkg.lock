@@ -14,6 +14,12 @@
   version = "v0.1.0"
 
 [[projects]]
+  name = "github.com/go-sql-driver/mysql"
+  packages = ["."]
+  revision = "72cd26f257d44c1114970e19afddcd812016007e"
+  version = "v1.4.1"
+
+[[projects]]
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
@@ -34,8 +40,8 @@
 [[projects]]
   name = "github.com/hashicorp/consul"
   packages = ["api","watch"]
-  revision = "0bddfa23a2ebe3c0773d917fc104f53d74f7a5ec"
-  version = "v1.4.0"
+  revision = "65d2c9b51d02e6b14db3da3cb8424ef72e046780"
+  version = "v1.4.1"
 
 [[projects]]
   name = "github.com/hashicorp/errwrap"
@@ -101,7 +107,7 @@
   branch = "master"
   name = "github.com/ilovelili/dongfeng-logger"
   packages = ["."]
-  revision = "17d3a5464f0dcf3e152dc32971687cf514486a52"
+  revision = "d26a6184d0e2064306a4ccf4c1e678ab25fd81e5"
 
 [[projects]]
   name = "github.com/konsorten/go-windows-terminal-sequences"
@@ -183,6 +189,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/olivere/dapper"
+  packages = ["."]
+  revision = "11d01232a968925e8f49b2f9164027ca31f78c90"
+
+[[projects]]
+  branch = "master"
   name = "github.com/petar/GoLLRB"
   packages = ["llrb"]
   revision = "53be0d36a84c2a886ca057d34b6aa4468df9ccb4"
@@ -229,9 +241,15 @@
   revision = "f21a4dfb5e38f5895301dc265a8def02365cc3d0"
   version = "v0.3.0"
 
+[[projects]]
+  name = "google.golang.org/appengine"
+  packages = ["cloudsql"]
+  revision = "e9657d882bb81064595ca3b56cbe2546bbabf7b1"
+  version = "v1.4.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0567688a1460c16a907e333a748700ddf1dc0bf08f7026079e46a8be83797638"
+  inputs-digest = "0a3352c69daa9986e400101b914ab654e1b4ddf9863eb82be7f75a0fe5647f4a"
   solver-name = "gps-cdcl"
   solver-version = 1

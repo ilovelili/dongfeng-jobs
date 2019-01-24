@@ -59,13 +59,18 @@ type Redis struct {
 	Size     int    `json:"maxconnectioncount"`
 }
 
-// MySQL mysql config
-type MySQL struct {
+// Database mysql database fields
+type Database struct {
 	Host       string `json:"host"`
 	DataBase   string `json:"database"`
 	User       string `json:"user"`
 	Password   string `json:"password"`
 	AllowDebug bool   `json:"allow_debug"`
+}
+
+// MySQL mysql config
+type MySQL struct {
+	Core *Database `json:"core"`
 }
 
 // Nats nats config

@@ -14,23 +14,36 @@ import (
 
 func commands() []cli.Command {
 	return []cli.Command{
-		// test fail
-		cli.Command{
-			Name:  "test_fail",
-			Usage: "test cmd",
-			Action: func(c *cli.Context) {
-				run(c, jobs.HeIsDeadJim)
-			},
-		},
 		// test
 		cli.Command{
 			Name:  "test",
 			Usage: "test cmd",
 			Action: func(c *cli.Context) {
-				run(c, func() int {
+				run(c, func(*cli.Context) int {
 					fmt.Println("Good to go")
 					return 0
 				})
+			},
+		},
+		// test error
+		cli.Command{
+			Name:  "test_error",
+			Usage: "test cmd to return error",
+			Action: func(c *cli.Context) {
+				run(c, jobs.HeIsDeadJim)
+			},
+		},
+		// menu csv file upload
+		cli.Command{
+			Name:  "menu_upload",
+			Usage: "menu csv file upload",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "menu_file_path",
+					Usage: "Menu file path",
+				}},
+			Action: func(c *cli.Context) {
+				run(c, jobs.MenuUpload)
 			},
 		},
 	}
@@ -42,19 +55,18 @@ func main() {
 	cmd.Init()
 }
 
-func run(c *cli.Context, fn func() int) {
+func run(c *cli.Context, fn func(*cli.Context) int) {
 	operationname := c.Command.FullName()
 	fmt.Println("job starts: ", operationname)
 	start := time.Now()
 
 	// fire
-	returnCode := fn()
-	systemlog := &logger.Log{
+	returnCode := fn(c)
+	log := &logger.Log{
 		Category: "CRONJOB:",
 		Content:  fmt.Sprintf("Batch [%s] elapsed time: %v\n", operationname, time.Since(start).Seconds()),
 		Time:     time.Now(),
 	}
-
-	systemlog.SystemLog(logger.CronJobs)
+	log.SystemLog(logger.CronJobs)
 	os.Exit(returnCode)
 }

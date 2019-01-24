@@ -17,7 +17,4 @@ for i in `find "$(cd ../services/proto; pwd)" -name "*.proto"`; do
     protoc --proto_path=$GOPATH/src:. --micro_out=$GOPATH/src --go_out=$GOPATH/src $i
 done
 
-# remove all omitempty tag
-cd ../services/proto && ls *.pb.go | xargs -n1 -IX bash -c 'sed s/,omitempty// X > X.tmp && mv X{.tmp,}'
-
 echo "done"
