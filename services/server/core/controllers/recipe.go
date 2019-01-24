@@ -19,12 +19,12 @@ func NewRecipeController() *RecipeController {
 	}
 }
 
-// Get get attendence
+// Get get recipe
 func (c *RecipeController) Get(name string) ([]*models.Recipe, error) {
 	return c.repository.Select(name)
 }
 
-// Save save attendence
+// Save save recipe
 func (c *RecipeController) Save(recipes []*models.Recipe) error {
 	for _, recipe := range recipes {
 		ingredient, err := c.SelectIngredient(recipe.IngredientName)

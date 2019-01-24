@@ -38,6 +38,12 @@
   version = "v1.4.1"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/gocarina/gocsv"
+  packages = ["."]
+  revision = "af1d9380204a6897e3a44ad3dc6397e16a21ee40"
+
+[[projects]]
   name = "github.com/golang/protobuf"
   packages = ["proto"]
   revision = "aa810b61a9c79d51363740d207bb46cf8e620ed5"
@@ -275,7 +281,7 @@
   branch = "master"
   name = "golang.org/x/sys"
   packages = ["unix","windows"]
-  revision = "c6b37f3e92850b723493d63fd35aad34e19e048d"
+  revision = "b90733256f2e882e81d52f9126de08df5615afd9"
 
 [[projects]]
   name = "golang.org/x/text"
@@ -292,6 +298,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3dd5148ed07f7b4957ce02116e7f3db2aabbfe70aa0d87d6b7b803fd7e450b2a"
+  inputs-digest = "c8bbd49e3557c63fe60b7fdb0899ba748ae9edf77e90975d7d4a1eabfd2dbe88"
   solver-name = "gps-cdcl"
   solver-version = 1
