@@ -2,10 +2,28 @@
 
 
 [[projects]]
+  name = "github.com/360EntSecGroup-Skylar/excelize"
+  packages = ["."]
+  revision = "dea7ba0ec43a4c29a6642d02b6edc73b8b0369f0"
+  version = "v1.4.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/armon/go-metrics"
   packages = ["."]
   revision = "f0300d1749da6fa982027e449ec0c7a145510c3c"
+
+[[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
+  version = "v1.1.1"
+
+[[projects]]
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
 
 [[projects]]
   name = "github.com/go-log/log"
@@ -110,10 +128,28 @@
   revision = "d26a6184d0e2064306a4ccf4c1e678ab25fd81e5"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/ilovelili/dongfeng-shared-lib"
+  packages = ["."]
+  revision = "4093ff764c362cef1cd69c45d15fd365d7ff1758"
+
+[[projects]]
   name = "github.com/konsorten/go-windows-terminal-sequences"
   packages = ["."]
   revision = "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242"
   version = "v1.0.1"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/lestrrat-go/jwx"
+  packages = ["internal/base64","jwa","jwk"]
+  revision = "0d477e6a1f0ec69634840308e3873fe71d928dd0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/lestrrat-go/pdebug"
+  packages = ["."]
+  revision = "39f9a71bcabe9432cbdfe4d3d33f41988acd2ce6"
 
 [[projects]]
   branch = "master"
@@ -189,6 +225,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/mohae/deepcopy"
+  packages = ["."]
+  revision = "c48cc78d482608239f6c4c92a4abd87eb8761c90"
+
+[[projects]]
+  branch = "master"
   name = "github.com/olivere/dapper"
   packages = ["."]
   revision = "11d01232a968925e8f49b2f9164027ca31f78c90"
@@ -250,6 +292,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "0a3352c69daa9986e400101b914ab654e1b4ddf9863eb82be7f75a0fe5647f4a"
+  inputs-digest = "3dd5148ed07f7b4957ce02116e7f3db2aabbfe70aa0d87d6b7b803fd7e450b2a"
   solver-name = "gps-cdcl"
   solver-version = 1

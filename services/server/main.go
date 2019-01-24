@@ -46,6 +46,19 @@ func commands() []cli.Command {
 				run(c, jobs.MenuUpload)
 			},
 		},
+		// menu csv file upload
+		cli.Command{
+			Name:  "recipe_upload",
+			Usage: "recipe excel file upload",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "recipe_file_path",
+					Usage: "Recipe file path",
+				}},
+			Action: func(c *cli.Context) {
+				run(c, jobs.RecipeUpload)
+			},
+		},
 	}
 }
 
