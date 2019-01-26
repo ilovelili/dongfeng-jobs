@@ -5,22 +5,22 @@ import (
 	"github.com/olivere/dapper"
 )
 
-// NutritionRepository nutrition repository
-type NutritionRepository struct {
+// IngredientNutritionRepository ingredient nutrition repository
+type IngredientNutritionRepository struct {
 	session *dapper.Session
 }
 
-// NewNutritionRepository init Nutrition repository
-func NewNutritionRepository() *NutritionRepository {
-	return &NutritionRepository{
+// NewIngredientNutritionRepository init ingredient nutrition repository
+func NewIngredientNutritionRepository() *IngredientNutritionRepository {
+	return &IngredientNutritionRepository{
 		session: session(coreclient()),
 	}
 }
 
-// Select get Nutrition / ingredients by name
-func (r *NutritionRepository) Select(ingredient string) (nutrition *models.Nutrition, err error) {
-	var n models.Nutrition
-	query := Table("nutritions").Alias("n").Where().Eq("n.ingredient", ingredient).Sql()
+// Select get ingredient nutrition by name
+func (r *IngredientNutritionRepository) Select(ingredient string) (nutrition *models.IngredientNutrition, err error) {
+	var n models.IngredientNutrition
+	query := Table("ingredient_nutritions").Alias("n").Where().Eq("n.ingredient", ingredient).Sql()
 	// no rows is actually not an error
 	if err = r.session.Find(query, nil).Single(&n); err != nil && norows(err) {
 		err = nil
@@ -30,7 +30,7 @@ func (r *NutritionRepository) Select(ingredient string) (nutrition *models.Nutri
 }
 
 // Upsert upsert nutritions
-func (r *NutritionRepository) Upsert(nutritions []*models.Nutrition) (err error) {
+func (r *IngredientNutritionRepository) Upsert(nutritions []*models.IngredientNutrition) (err error) {
 	tx, err := r.session.Begin()
 	if err != nil {
 		return
@@ -38,7 +38,7 @@ func (r *NutritionRepository) Upsert(nutritions []*models.Nutrition) (err error)
 
 	// upsert by loop
 	for _, nutrition := range nutritions {
-		query := Table("nutritions").Alias("n").Project("n.id").
+		query := Table("ingredient_nutritions").Alias("n").Project("n.id").
 			Where().
 			Eq("n.ingredient", nutrition.Ingredient).
 			Sql()

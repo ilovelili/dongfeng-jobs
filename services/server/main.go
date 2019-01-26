@@ -59,17 +59,30 @@ func commands() []cli.Command {
 				run(c, jobs.RecipeUpload)
 			},
 		},
-		// menu csv file upload
+		// ingredient nutrition csv file upload
 		cli.Command{
-			Name:  "nutrition_upload",
-			Usage: "nutrition csv file upload",
+			Name:  "ingredient_nutrition_upload",
+			Usage: "ingredient nutrition csv file upload",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "nutrition_file_path",
-					Usage: "Nutrition file path",
+					Name:  "ingredient_nutrition_file_path",
+					Usage: "Ingredient nutrition file path",
 				}},
 			Action: func(c *cli.Context) {
-				run(c, jobs.NutritionUpload)
+				run(c, jobs.IngredientNutritionUpload)
+			},
+		},
+		// recipe nutrition csv file upload
+		cli.Command{
+			Name:  "recipe_nutrition_upload",
+			Usage: "recipe nutrition csv file upload",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "recipe_nutrition_file_path",
+					Usage: "recipe nutrition file path",
+				}},
+			Action: func(c *cli.Context) {
+				run(c, jobs.RecipeNutritionUpload)
 			},
 		},
 	}
