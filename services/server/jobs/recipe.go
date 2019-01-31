@@ -87,7 +87,20 @@ func RecipeUpload(ctx *cli.Context) int {
 		}
 	}
 
-	err = recipecontroller.Save(recipes)
+	// distinct
+	distinctedrecipes := []*models.Recipe{}
+	keys := make(map[string]bool)
+	for _, recipe := range recipes {
+		if _, ok := keys[recipe.Name]; ok {
+			// already added, ignore
+			continue
+		} else {
+			keys[recipe.Name] = true
+			distinctedrecipes = append(distinctedrecipes, recipe)
+		}
+	}
+
+	err = recipecontroller.Save(distinctedrecipes)
 	if err != nil {
 		errorlog(fmt.Sprintf("Error: failed to save recipe %s", err), operationname)
 		return 1

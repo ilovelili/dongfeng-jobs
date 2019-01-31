@@ -33,8 +33,21 @@ func IngredientNutritionUpload(ctx *cli.Context) int {
 		return 1
 	}
 
+	// distinct
+	distinctedingredientnutritions := []*models.IngredientNutrition{}
+	keys := make(map[string]bool)
+	for _, ingredientnutrition := range ingredientnutritions {
+		if _, ok := keys[ingredientnutrition.Ingredient]; ok {
+			// already added, ignore
+			continue
+		} else {
+			keys[ingredientnutrition.Ingredient] = true
+			distinctedingredientnutritions = append(distinctedingredientnutritions, ingredientnutrition)
+		}
+	}
+
 	nutritioncontroller := controllers.NewNutritionController()
-	err = nutritioncontroller.SaveIngredientNutrition(ingredientnutritions)
+	err = nutritioncontroller.SaveIngredientNutrition(distinctedingredientnutritions)
 	if err != nil {
 		errorlog(fmt.Sprintf("Error on saving ingredient nutritions: %s", err), operationname)
 		return 1
@@ -67,8 +80,21 @@ func RecipeNutritionUpload(ctx *cli.Context) int {
 		return 1
 	}
 
+	// distinct
+	distinctedrecipenutritions := []*models.RecipeNutrition{}
+	keys := make(map[string]bool)
+	for _, recipenutrition := range recipenutritions {
+		if _, ok := keys[recipenutrition.Recipe]; ok {
+			// already added, ignore
+			continue
+		} else {
+			keys[recipenutrition.Recipe] = true
+			distinctedrecipenutritions = append(distinctedrecipenutritions, recipenutrition)
+		}
+	}
+
 	nutritioncontroller := controllers.NewNutritionController()
-	err = nutritioncontroller.SaveRecipeNutrition(recipenutritions)
+	err = nutritioncontroller.SaveRecipeNutrition(distinctedrecipenutritions)
 	if err != nil {
 		errorlog(fmt.Sprintf("Error on saving recipe nutritions: %s", err), operationname)
 		return 1
