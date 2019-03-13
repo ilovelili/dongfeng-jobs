@@ -3,5 +3,5 @@ set -e
 # move to root directory
 cd ..
 # docker build
-docker build -t dongfeng-jobs . -f Dockerfile
+docker build -t ilovelili/dongfeng-jobs . -f Dockerfile
 echo "Bye"
