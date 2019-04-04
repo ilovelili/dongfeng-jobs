@@ -102,7 +102,7 @@ func MenuUpload(ctx *cli.Context) int {
 		lineCount++
 	}
 
-	parsedmenus := make([]*models.Menu, 0)
+	parsedmenus := []*models.Menu{}
 	for _, menu := range menus {
 		parsedmenus = append(parsedmenus, menu.ParseRecipes()...)
 	}

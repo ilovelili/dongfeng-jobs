@@ -19,7 +19,7 @@ type Menu struct {
 
 // ParseRecipes parse recipes
 func (m *Menu) ParseRecipes() []*Menu {
-	result := make([]*Menu, 0)
+	result := []*Menu{}
 	recipes := parse(m.JuniorBreakfastRaw)
 	for _, r := range recipes {
 		result = append(result, &Menu{

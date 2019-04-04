@@ -62,7 +62,7 @@ func RecipeUpload(ctx *cli.Context) int {
 		}
 	}
 
-	recipes := make([]*models.Recipe, 0)
+	recipes := []*models.Recipe{}
 	recipecontroller := controllers.NewRecipeController()
 	for recipe, ingredients := range recipeingredientmap {
 		for _, ingredient := range ingredients {
