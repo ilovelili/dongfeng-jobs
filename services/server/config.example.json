@@ -1,23 +1,17 @@
 {
     "services": {  
         "mysql": {
-            "core": {
-                "host": "mysql:3306",
-                "database": "database",
-                "user": "user",
-                "password": "password",
-                "allow_debug": true
-            }
+            "host": "rm-uf6kybgk400273og92o.mysql.rds.aliyuncs.com:3306",
+            "database": "dongfeng_core",
+            "user": "dongfeng",
+            "password": "Aa!7059970599",
+            "allow_debug": true
         }
     },
     "servicenames": {        
         "core_server": "dongfeng.svc.core.server.api"
     },
-    "servicemeta": {
-        "registry_ttl": 30,
-        "registry_heartbeat": 10,
-        "api_version": "0.0.1",
-        "long_request_timeout": 90,
-        "longer_request_timeout": 600
+    "servicemeta": {        
+        "api_version": "0.0.1"
     }
 }

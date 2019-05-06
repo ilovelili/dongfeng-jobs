@@ -9,5 +9,7 @@ ENV CONTAINER_TIMEZONE Asia/Beijing
 RUN echo $CONTAINER_TIMEZONE >/etc/timezone && \
     ln -sf /usr/share/zoneinfo/$CONTAINER_TIMEZONE /etc/localtime
 
-WORKDIR /root/
-COPY config.*.json server /root/
+WORKDIR /usr/local/bin
+COPY config.*.json server /usr/local/bin/
+ENTRYPOINT ["server"]
+CMD ["test"]

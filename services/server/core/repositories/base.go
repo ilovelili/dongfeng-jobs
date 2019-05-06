@@ -23,11 +23,11 @@ var (
 func coreclient() dbclient {
 	once.Do(func() {
 		config := utils.GetConfig()
-		db, err := sql.Open("mysql", connectionstring("core"))
+		db, err := sql.Open("mysql", connectionstring())
 		if err == nil {
 			coreinstance = dbclient{
 				db:      db,
-				session: dapper.New(db).Dialect(dapper.MySQL).Debug(config.MySQL.Core.AllowDebug),
+				session: dapper.New(db).Dialect(dapper.MySQL).Debug(config.MySQL.AllowDebug),
 			}
 		}
 	})
@@ -80,15 +80,9 @@ func updateTx(client dbclient, entity interface{}) (err error) {
 }
 
 // mysql connection string
-func connectionstring(database string) string {
+func connectionstring() string {
 	config := utils.GetConfig()
-	// [username[:password]@][protocol[(address)]]/dbname[?param1=value1&...&paramN=valueN]
-	switch database {
-	case "core":
-		return fmt.Sprintf("%v:%v@tcp(%v)/%v?parseTime=true", config.MySQL.Core.User, config.MySQL.Core.Password, config.MySQL.Core.Host, config.MySQL.Core.DataBase)
-	default:
-		return ""
-	}
+	return fmt.Sprintf("%v:%v@tcp(%v)/%v?parseTime=true", config.MySQL.User, config.MySQL.Password, config.MySQL.Host, config.MySQL.DataBase)
 }
 
 // Table dapper.Q Wrapper

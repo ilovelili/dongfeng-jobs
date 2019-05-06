@@ -8,7 +8,6 @@ import (
 	"path"
 	"strings"
 	"sync"
-	"time"
 )
 
 var once sync.Once
@@ -52,15 +51,8 @@ func GetConfig() *Config {
 	return instance
 }
 
-// Redis redis config
-type Redis struct {
-	Host     string `json:"host"`
-	Password string `json:"password,omitempty"`
-	Size     int    `json:"maxconnectioncount"`
-}
-
-// Database mysql database fields
-type Database struct {
+// MySQL mysql database fields
+type MySQL struct {
 	Host       string `json:"host"`
 	DataBase   string `json:"database"`
 	User       string `json:"user"`
@@ -68,81 +60,20 @@ type Database struct {
 	AllowDebug bool   `json:"allow_debug"`
 }
 
-// MySQL mysql config
-type MySQL struct {
-	Core *Database `json:"core"`
-}
-
-// Nats nats config
-type Nats struct {
-	Host   string `json:"host"`
-	Size   int    `json:"maxconnectioncount"`
-	Topics string `json:"topics"`
-}
-
 // Services external services like Mysql
 type Services struct {
-	Redis `json:"redis"`
 	MySQL `json:"mysql"`
-	Nats  `json:"nats"`
-}
-
-// ServiceNames servicename config
-type ServiceNames struct {
-	CoreServer string `json:"core_server"`
 }
 
 // ServiceMeta service meta data including service discovery specs
 type ServiceMeta struct {
-	RegistryTTL       int    `json:"registry_ttl"`
-	RegistryHeartbeat int    `json:"registry_heartbeat"`
-	Version           string `json:"api_version"`
+	Version string `json:"api_version"`
 }
 
 // Config config entry
 type Config struct {
-	Services     `json:"services"`
-	ServiceNames `json:"servicenames"`
-	ServiceMeta  `json:"servicemeta"`
-}
-
-// GetNatsTopics convert config string to topic array
-func GetNatsTopics(topic string) []string {
-	return strings.Split(topic, ",")
-}
-
-// GetMaxConnectionCount get redis max connection count
-func (r *Redis) GetMaxConnectionCount() int {
-	if r.Size == 0 {
-		return 100
-	}
-	return r.Size
-}
-
-// GetMaxConnectionCount get nats max connection count
-func (n *Nats) GetMaxConnectionCount() int {
-	if n.Size == 0 {
-		return 100
-	}
-	return n.Size
-}
-
-// GetRegistryTTL get registry ttl
-func (s *ServiceMeta) GetRegistryTTL() time.Duration {
-	if s.RegistryTTL == 0 {
-		return 30 * time.Second
-	}
-
-	return time.Duration(s.RegistryTTL) * time.Second
-}
-
-// GetRegistryHeartbeat get registry heartbeat
-func (s *ServiceMeta) GetRegistryHeartbeat() time.Duration {
-	if s.RegistryHeartbeat == 0 {
-		return 10 * time.Second
-	}
-
-	return time.Duration(s.RegistryHeartbeat) * time.Second
+	Services    `json:"services"`
+	ServiceMeta `json:"servicemeta"`
 }
 
 // GetVersion get api version

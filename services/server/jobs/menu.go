@@ -102,13 +102,13 @@ func MenuUpload(ctx *cli.Context) int {
 		lineCount++
 	}
 
-	parsedmenus := []*models.Menu{}
+	_menus := []*models.Menu{}
 	for _, menu := range menus {
-		parsedmenus = append(parsedmenus, menu.ParseRecipes()...)
+		_menus = append(_menus, menu.ParseRecipes()...)
 	}
 
 	menucontroller := controllers.NewMenuController()
-	err = menucontroller.Save(parsedmenus)
+	err = menucontroller.Save(_menus)
 	if err != nil {
 		errorlog(fmt.Sprintf("Error on saving menu: %s", err), operationname)
 		return 1

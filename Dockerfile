@@ -28,3 +28,6 @@ RUN echo $CONTAINER_TIMEZONE >/etc/timezone && \
 
 WORKDIR /root/
 COPY --from=builder $BUILDER_DIR/config.*.json $BUILDER_DIR/server /root/
+
+ENTRYPOINT ["server"]
+CMD ["test"]
