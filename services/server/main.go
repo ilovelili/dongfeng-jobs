@@ -78,8 +78,8 @@ func commands() []cli.Command {
 			Usage: "recipe nutrition csv file upload",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "recipe_nutrition_file_path",
-					Usage: "recipe nutrition file path",
+					Name:  "recipe_nutrition_file_dir",
+					Usage: "recipe nutrition file directory",
 				}},
 			Action: func(c *cli.Context) {
 				run(c, jobs.RecipeNutritionUpload)

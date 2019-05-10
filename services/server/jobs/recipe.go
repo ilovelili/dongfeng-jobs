@@ -12,18 +12,6 @@ import (
 	"github.com/micro/cli"
 )
 
-// RecipeUploadItem recipe upload entity
-type RecipeUploadItem struct {
-	Name       string `csv:"菜品名称"`
-	Ingredient string `csv:"原料名称"`
-}
-
-// IngredientUploadItem ingredient upload entity
-type IngredientUploadItem struct {
-	Name     string `csv:"原料名称"`
-	Material string `csv:"物料名称"`
-}
-
 // RecipeUpload recipe excel file upload
 func RecipeUpload(ctx *cli.Context) int {
 	operationname := "upload recipe csv files"
@@ -34,7 +22,7 @@ func RecipeUpload(ctx *cli.Context) int {
 	}
 
 	filepath := ctx.String("recipe_file_dir")
-	recipefiles, ingredientfiles, err := findFiles(filepath)
+	recipefiles, ingredientfiles, err := findRecipeFiles(filepath)
 	if err != nil {
 		errorlog(fmt.Sprintf("Error: failed to open %s", filepath), operationname)
 		return 1
@@ -60,7 +48,7 @@ func RecipeUpload(ctx *cli.Context) int {
 	return 0
 }
 
-func findFiles(dir string) (recipefiles, ingredientfiles []string, err error) {
+func findRecipeFiles(dir string) (recipefiles, ingredientfiles []string, err error) {
 	err = filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 		if !info.IsDir() && strings.Index(info.Name(), ".csv") > -1 {
 			if strings.Index(info.Name(), ".csv.0") > -1 {
@@ -73,14 +61,13 @@ func findFiles(dir string) (recipefiles, ingredientfiles []string, err error) {
 		}
 		return nil
 	})
-
 	return
 }
 
 func updateRecipeAndIngredient(recipefiles []string) error {
-	recipes := []*RecipeUploadItem{}
+	recipes := []*models.Recipe{}
 	for _, file := range recipefiles {
-		_recipes := []*RecipeUploadItem{}
+		_recipes := []*models.Recipe{}
 		csv, err := os.OpenFile(file, os.O_RDONLY, os.ModePerm)
 		if err != nil {
 			return fmt.Errorf("failed to open %s", file)
@@ -97,9 +84,9 @@ func updateRecipeAndIngredient(recipefiles []string) error {
 	ingredientmap := make(map[string][]string)
 	for _, recipe := range recipes {
 		if ingredients, ok := ingredientmap[recipe.Name]; !ok {
-			ingredientmap[recipe.Name] = []string{recipe.Ingredient}
+			ingredientmap[recipe.Name] = []string{recipe.IngredientName}
 		} else {
-			ingredientmap[recipe.Name] = append(ingredients, recipe.Ingredient)
+			ingredientmap[recipe.Name] = append(ingredients, recipe.IngredientName)
 		}
 	}
 
@@ -149,9 +136,9 @@ func updateRecipeAndIngredient(recipefiles []string) error {
 }
 
 func updateIngredientMaterial(ingredientfiles []string) error {
-	ingredients := []*IngredientUploadItem{}
+	ingredients := []*models.Ingredient{}
 	for _, file := range ingredientfiles {
-		_ingredients := []*IngredientUploadItem{}
+		_ingredients := []*models.Ingredient{}
 		csv, err := os.OpenFile(file, os.O_RDONLY, os.ModePerm)
 
 		fmt.Println("ingredient csv ", csv.Name())
@@ -170,10 +157,7 @@ func updateIngredientMaterial(ingredientfiles []string) error {
 
 	ingredientcontroller := controllers.NewIngredientController()
 	for _, ingredient := range ingredients {
-		if err := ingredientcontroller.Save(&models.Ingredient{
-			Name:     ingredient.Name,
-			Material: ingredient.Material,
-		}); err != nil {
+		if err := ingredientcontroller.Save(ingredient); err != nil {
 			return fmt.Errorf("failed to save ingredient %s", err)
 		}
 	}
