@@ -107,6 +107,10 @@ func MenuUpload(ctx *cli.Context) int {
 		_menus = append(_menus, menu.ParseRecipes()...)
 	}
 
+	if len(_menus) == 0 {
+		return 0
+	}
+
 	menucontroller := controllers.NewMenuController()
 	err = menucontroller.Save(_menus)
 	if err != nil {

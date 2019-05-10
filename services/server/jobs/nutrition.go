@@ -46,6 +46,10 @@ func IngredientNutritionUpload(ctx *cli.Context) int {
 			return 1
 		}
 
+		if len(ingredientnutritions) == 0 {
+			continue
+		}
+
 		// distinct
 		distinctedingredientnutritions := []*models.IngredientNutrition{}
 		keys := make(map[string]bool)
@@ -103,6 +107,10 @@ func RecipeNutritionUpload(ctx *cli.Context) int {
 		if err := gocsv.UnmarshalFile(file, &recipenutritions); err != nil {
 			errorlog(fmt.Sprintf("Error: invalid recipe nutrition file %s", filepath), operationname)
 			return 1
+		}
+
+		if len(recipenutritions) == 0 {
+			continue
 		}
 
 		// distinct

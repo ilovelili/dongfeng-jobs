@@ -81,6 +81,10 @@ func updateRecipeAndIngredient(recipefiles []string) error {
 		recipes = append(recipes, _recipes...)
 	}
 
+	if len(recipes) == 0 {
+		return nil
+	}
+
 	ingredientmap := make(map[string][]string)
 	for _, recipe := range recipes {
 		if ingredients, ok := ingredientmap[recipe.Name]; !ok {
@@ -153,6 +157,10 @@ func updateIngredientMaterial(ingredientfiles []string) error {
 		}
 
 		ingredients = append(ingredients, _ingredients...)
+	}
+
+	if len(ingredients) == 0 {
+		return nil
 	}
 
 	ingredientcontroller := controllers.NewIngredientController()
