@@ -45,7 +45,8 @@ func (c *RecipeController) IngredientExists(ingredient string) (bool, error) {
 // SaveIngredient save ingredient
 func (c *RecipeController) SaveIngredient(ingredient string) error {
 	return c.ingredientcontroller.Save(&models.Ingredient{
-		Name: ingredient,
+		Name:     ingredient,
+		Material: ingredient, // same as name by default
 	})
 }
 

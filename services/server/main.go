@@ -52,8 +52,8 @@ func commands() []cli.Command {
 			Usage: "recipe excel file upload",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "recipe_file_path",
-					Usage: "Recipe file path",
+					Name:  "recipe_file_dir",
+					Usage: "Recipe file directory",
 				}},
 			Action: func(c *cli.Context) {
 				run(c, jobs.RecipeUpload)
