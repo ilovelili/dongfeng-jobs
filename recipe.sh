@@ -20,4 +20,4 @@ cd /root/dongfeng/jobs/
 
 cd /root/dongfeng/sunshine/sunshinerecipe/output
 # clear all
-rm *.csv *.csv.* *.xls
+rm *.csv.* *.xls
