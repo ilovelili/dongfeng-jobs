@@ -17,3 +17,7 @@ cd /root/dongfeng/jobs/
 
 # --recipe_file_dir=/home/min/Projects/dongfeng-sunshine-recipe-crawler/output
 ./dongfeng-jobs recipe_upload --recipe_file_dir="/root/dongfeng/sunshine/sunshinerecipe/output"
+
+cd /root/dongfeng/sunshine/sunshinerecipe/output
+# clear all
+rm *.csv *.csv.* *.xls
