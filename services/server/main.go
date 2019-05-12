@@ -65,7 +65,7 @@ func commands() []cli.Command {
 			Usage: "ingredient nutrition csv file upload",
 			Flags: []cli.Flag{
 				cli.StringFlag{
-					Name:  "ingredient_nutrition_file_path",
+					Name:  "ingredient_nutrition_file_dir",
 					Usage: "Ingredient nutrition file path",
 				}},
 			Action: func(c *cli.Context) {

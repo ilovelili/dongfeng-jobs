@@ -16,12 +16,12 @@ import (
 func IngredientNutritionUpload(ctx *cli.Context) int {
 	operationname := "upload ingredient nutrition csv file"
 
-	if len(ctx.String("ingredient_nutrition_file_path")) == 0 {
-		errorlog(fmt.Sprintf("Error: %s", "must assign ingredient_nutrition_file_path"), operationname)
+	if len(ctx.String("ingredient_nutrition_file_dir")) == 0 {
+		errorlog(fmt.Sprintf("Error: %s", "must assign ingredient_nutrition_file_dir"), operationname)
 		return 1
 	}
 
-	filepath := ctx.String("ingredient_nutrition_file_path")
+	filepath := ctx.String("ingredient_nutrition_file_dir")
 	files, err := findNutritionFiles(filepath)
 	if err != nil {
 		errorlog(fmt.Sprintf("Error: failed to open %s", filepath), operationname)
