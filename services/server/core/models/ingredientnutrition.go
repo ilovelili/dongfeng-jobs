@@ -4,6 +4,7 @@ package models
 type IngredientNutrition struct {
 	ID                int64   `dapper:"id,primarykey,autoincrement,table=ingredient_nutritions" csv:"-"`
 	Ingredient        string  `dapper:"ingredient" csv:"ingredient"`
+	Alias             string  `dapper:"alias" csv:"-"`
 	Protein100g       float64 `dapper:"protein_100g" csv:"protein_100g"`
 	ProteinDaily      float64 `dapper:"protein_daily" csv:"protein_daily"`
 	Fat100g           float64 `dapper:"fat_100g" csv:"fat_100g"`

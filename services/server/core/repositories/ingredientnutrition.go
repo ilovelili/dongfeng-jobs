@@ -38,6 +38,10 @@ func (r *IngredientNutritionRepository) Upsert(nutritions []*models.IngredientNu
 
 	// upsert by loop
 	for _, nutrition := range nutritions {
+		if nutrition.Alias == "" {
+			nutrition.Alias = nutrition.Ingredient
+		}
+
 		query := Table("ingredient_nutritions").Alias("n").Project("n.id").
 			Where().
 			Eq("n.ingredient", nutrition.Ingredient).
