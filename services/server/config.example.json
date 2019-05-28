@@ -1,10 +1,10 @@
 {
     "services": {  
         "mysql": {
-            "host": "rm-uf6kybgk400273og92o.mysql.rds.aliyuncs.com:3306",
+            "host": "mysql:3306",
             "database": "dongfeng_core",
-            "user": "dongfeng",
-            "password": "Aa!7059970599",
+            "user": "user",
+            "password": "password",
             "allow_debug": true
         }
     },
