@@ -35,20 +35,28 @@ func commands() []cli.Command {
 		},
 		// test error
 		cli.Command{
-			Name:  "test_chrome_headless",
-			Usage: "test headless chrome",
+			Name:  "ebook_convert_pdf",
+			Usage: "use chrome headless to convert ebook html to pdf",
 			Flags: []cli.Flag{
 				cli.StringFlag{
 					Name:  "url",
 					Usage: "Target url",
 				},
-				cli.StringFlag{
-					Name:  "referrer",
-					Usage: "Referrer",
+				cli.Float64Flag{
+					Name:  "width",
+					Usage: "PDF width in inches, default 8.27 (A4)",
+				},
+				cli.Float64Flag{
+					Name:  "height",
+					Usage: "PDF height in inches, default 11.69 (A4)",
+				},
+				cli.Float64Flag{
+					Name:  "output",
+					Usage: "PDF output file name",
 				},
 			},
 			Action: func(c *cli.Context) {
-				run(c, jobs.TestHeadlessChrome)
+				run(c, jobs.ConvertEbookToPDF)
 			},
 		},
 		// menu csv file upload

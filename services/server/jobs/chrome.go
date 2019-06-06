@@ -14,10 +14,36 @@ import (
 	"github.com/micro/cli"
 )
 
-// TestHeadlessChrome test headless chrome
-func TestHeadlessChrome(ctx *cli.Context) int {
-	operationName := "TestHeadlessChrome"
-	if err := run(ctx.String("url"), ctx.String("referrer")); err != nil {
+const (
+	chromeDevTool = "http://127.0.0.1:9222"
+)
+
+// ConvertEbookToPDF test headless chrome
+func ConvertEbookToPDF(ctx *cli.Context) int {
+	operationName := "ConvertEbookToPDF"
+
+	url := ctx.String("url")
+	if url == "" {
+		errorlog("invalid url", operationName)
+		return 1
+	}
+
+	output := ctx.String("output")
+	if output == "" {
+		output = "output.pdf"
+	}
+
+	width := ctx.Float64("width")
+	if width == 0 {
+		width = 8.27
+	}
+
+	height := ctx.Float64("height")
+	if width == 0 {
+		width = 11.64
+	}
+
+	if err := convert(url, output, width, height); err != nil {
 		errorlog(err.Error(), operationName)
 		return 1
 	}
@@ -25,12 +51,12 @@ func TestHeadlessChrome(ctx *cli.Context) int {
 	return 0
 }
 
-func run(url, referrer string) (err error) {
+func convert(url, output string, width, height float64) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	// Use the DevTools HTTP/JSON API to manage targets (e.g. pages, webworkers).
-	devt := devtool.New("http://127.0.0.1:9222")
+	devt := devtool.New(chromeDevTool)
 	pt, err := devt.Get(ctx, devtool.Page)
 	if err != nil {
 		pt, err = devt.Create(ctx)
@@ -48,7 +74,6 @@ func run(url, referrer string) (err error) {
 	defer conn.Close() // Leaving connections open will leak memory.
 
 	c := cdp.NewClient(conn)
-
 	// Open a DOMContentEventFired client to buffer this event.
 	domContent, err := c.Page.DOMContentEventFired(ctx)
 	if err != nil {
@@ -63,7 +88,7 @@ func run(url, referrer string) (err error) {
 	}
 
 	// Create the Navigate arguments with the optional Referrer field set.
-	navArgs := page.NewNavigateArgs(url).SetReferrer(referrer)
+	navArgs := page.NewNavigateArgs(url)
 	nav, err := c.Page.Navigate(ctx, navArgs)
 	if err != nil {
 		return
@@ -107,5 +132,23 @@ func run(url, referrer string) (err error) {
 	}
 
 	fmt.Printf("Saved screenshot: %s\n", screenshotName)
+
+	// Print to PDF
+	printToPDFArgs := page.NewPrintToPDFArgs().
+		SetLandscape(false).
+		SetPrintBackground(true).
+		SetMarginTop(0).
+		SetMarginBottom(0).
+		SetMarginLeft(0).
+		SetMarginRight(0).
+		SetPaperWidth(width).
+		SetPaperHeight(height)
+
+	pdfName := output
+	print, _ := c.Page.PrintToPDF(ctx, printToPDFArgs)
+	if err = ioutil.WriteFile(pdfName, print.Data, 0644); err != nil {
+		return
+	}
+
 	return nil
 }
