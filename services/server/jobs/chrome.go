@@ -39,8 +39,8 @@ func ConvertEbookToPDF(ctx *cli.Context) int {
 	}
 
 	height := ctx.Float64("height")
-	if width == 0 {
-		width = 11.64
+	if height == 0 {
+		height = 11.64
 	}
 
 	if err := convert(url, output, width, height); err != nil {
