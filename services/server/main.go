@@ -33,6 +33,14 @@ func commands() []cli.Command {
 				run(c, jobs.HeIsDeadJim)
 			},
 		},
+		// test error
+		cli.Command{
+			Name:  "test_chrome_headless",
+			Usage: "test headless chrome",
+			Action: func(c *cli.Context) {
+				run(c, jobs.TestHeadlessChrome)
+			},
+		},
 		// menu csv file upload
 		cli.Command{
 			Name:  "menu_upload",

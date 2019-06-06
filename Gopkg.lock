@@ -2,28 +2,10 @@
 
 
 [[projects]]
-  name = "github.com/360EntSecGroup-Skylar/excelize"
-  packages = ["."]
-  revision = "dea7ba0ec43a4c29a6642d02b6edc73b8b0369f0"
-  version = "v1.4.1"
-
-[[projects]]
   branch = "master"
   name = "github.com/armon/go-metrics"
   packages = ["."]
   revision = "f0300d1749da6fa982027e449ec0c7a145510c3c"
-
-[[projects]]
-  name = "github.com/davecgh/go-spew"
-  packages = ["spew"]
-  revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
-  version = "v1.1.1"
-
-[[projects]]
-  name = "github.com/dgrijalva/jwt-go"
-  packages = ["."]
-  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
-  version = "v3.2.0"
 
 [[projects]]
   name = "github.com/go-log/log"
@@ -60,6 +42,12 @@
   packages = ["."]
   revision = "9b3b1e0f5f99ae461456d768e7d301a7acdaa2d8"
   version = "v1.1.0"
+
+[[projects]]
+  name = "github.com/gorilla/websocket"
+  packages = ["."]
+  revision = "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d"
+  version = "v1.4.0"
 
 [[projects]]
   name = "github.com/hashicorp/consul"
@@ -134,28 +122,16 @@
   revision = "d26a6184d0e2064306a4ccf4c1e678ab25fd81e5"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/ilovelili/dongfeng-shared-lib"
-  packages = ["."]
-  revision = "4093ff764c362cef1cd69c45d15fd365d7ff1758"
-
-[[projects]]
   name = "github.com/konsorten/go-windows-terminal-sequences"
   packages = ["."]
   revision = "5c8c8bd35d3832f5d134ae1e1e375b69a4d25242"
   version = "v1.0.1"
 
 [[projects]]
-  branch = "master"
-  name = "github.com/lestrrat-go/jwx"
-  packages = ["internal/base64","jwa","jwk"]
-  revision = "0d477e6a1f0ec69634840308e3873fe71d928dd0"
-
-[[projects]]
-  branch = "master"
-  name = "github.com/lestrrat-go/pdebug"
-  packages = ["."]
-  revision = "39f9a71bcabe9432cbdfe4d3d33f41988acd2ce6"
+  name = "github.com/mafredri/cdp"
+  packages = [".","devtool","internal/errors","protocol/accessibility","protocol/animation","protocol/applicationcache","protocol/audits","protocol/backgroundservice","protocol/browser","protocol/cachestorage","protocol/cast","protocol/console","protocol/css","protocol/database","protocol/debugger","protocol/deviceorientation","protocol/dom","protocol/domdebugger","protocol/domsnapshot","protocol/domstorage","protocol/emulation","protocol/fetch","protocol/headlessexperimental","protocol/heapprofiler","protocol/indexeddb","protocol/input","protocol/inspector","protocol/internal","protocol/io","protocol/layertree","protocol/log","protocol/memory","protocol/network","protocol/overlay","protocol/page","protocol/performance","protocol/profiler","protocol/runtime","protocol/schema","protocol/security","protocol/serviceworker","protocol/storage","protocol/systeminfo","protocol/target","protocol/tethering","protocol/tracing","protocol/webaudio","rpcc"]
+  revision = "b17293bf1ce4d35aba6b61227059a0e783e9eeaa"
+  version = "v0.23.2"
 
 [[projects]]
   branch = "master"
@@ -231,12 +207,6 @@
 
 [[projects]]
   branch = "master"
-  name = "github.com/mohae/deepcopy"
-  packages = ["."]
-  revision = "c48cc78d482608239f6c4c92a4abd87eb8761c90"
-
-[[projects]]
-  branch = "master"
   name = "github.com/olivere/dapper"
   packages = ["."]
   revision = "11d01232a968925e8f49b2f9164027ca31f78c90"
@@ -298,6 +268,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "c8bbd49e3557c63fe60b7fdb0899ba748ae9edf77e90975d7d4a1eabfd2dbe88"
+  inputs-digest = "d967e543b72e6d4b70b4170456bfaed6ed97c4612e63bac160aa0548558979db"
   solver-name = "gps-cdcl"
   solver-version = 1
