@@ -37,6 +37,16 @@ func commands() []cli.Command {
 		cli.Command{
 			Name:  "test_chrome_headless",
 			Usage: "test headless chrome",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "url",
+					Usage: "Target url",
+				},
+				cli.StringFlag{
+					Name:  "referrer",
+					Usage: "Referrer",
+				},
+			},
 			Action: func(c *cli.Context) {
 				run(c, jobs.TestHeadlessChrome)
 			},

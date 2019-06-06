@@ -17,7 +17,7 @@ import (
 // TestHeadlessChrome test headless chrome
 func TestHeadlessChrome(ctx *cli.Context) int {
 	operationName := "TestHeadlessChrome"
-	if err := run(); err != nil {
+	if err := run(ctx.String("url"), ctx.String("referrer")); err != nil {
 		errorlog(err.Error(), operationName)
 		return 1
 	}
@@ -25,7 +25,7 @@ func TestHeadlessChrome(ctx *cli.Context) int {
 	return 0
 }
 
-func run() (err error) {
+func run(url, referrer string) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
@@ -63,8 +63,7 @@ func run() (err error) {
 	}
 
 	// Create the Navigate arguments with the optional Referrer field set.
-	navArgs := page.NewNavigateArgs("https://www.google.com").
-		SetReferrer("https://duckduckgo.com")
+	navArgs := page.NewNavigateArgs(url).SetReferrer(referrer)
 	nav, err := c.Page.Navigate(ctx, navArgs)
 	if err != nil {
 		return
