@@ -8,6 +8,10 @@
             "allow_debug": true
         }
     },
+    "ebook": {
+        "origin_dir": "/home/min/Projects/dongfeng/src/github.com/ilovelili/dongfeng-core/services/server/ebook",
+        "dest_dir": "/home/min/Projects/test"
+    },
     "servicenames": {        
         "core_server": "dongfeng.svc.core.server.api"
     },

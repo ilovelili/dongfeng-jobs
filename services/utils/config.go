@@ -65,6 +65,12 @@ type Services struct {
 	MySQL `json:"mysql"`
 }
 
+// Ebook ebook related config
+type Ebook struct {
+	OriginDir string `json:"origin_dir"`
+	DestDir   string `json:"dest_dir"`
+}
+
 // ServiceMeta service meta data including service discovery specs
 type ServiceMeta struct {
 	Version string `json:"api_version"`
@@ -73,6 +79,7 @@ type ServiceMeta struct {
 // Config config entry
 type Config struct {
 	Services    `json:"services"`
+	Ebook       `json:"ebook"`
 	ServiceMeta `json:"servicemeta"`
 }
 

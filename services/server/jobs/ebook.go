@@ -4,11 +4,14 @@ import (
 	"context"
 	"fmt"
 	"io/ioutil"
+	"os"
+	"path"
 	"time"
 
+	"github.com/ilovelili/dongfeng-jobs/services/server/core/controllers"
+	"github.com/ilovelili/dongfeng-jobs/services/server/core/models"
 	"github.com/mafredri/cdp"
 	"github.com/mafredri/cdp/devtool"
-	"github.com/mafredri/cdp/protocol/dom"
 	"github.com/mafredri/cdp/protocol/page"
 	"github.com/mafredri/cdp/rpcc"
 	"github.com/micro/cli"
@@ -22,17 +25,6 @@ const (
 func ConvertEbookToPDF(ctx *cli.Context) int {
 	operationName := "ConvertEbookToPDF"
 
-	url := ctx.String("url")
-	if url == "" {
-		errorlog("invalid url", operationName)
-		return 1
-	}
-
-	output := ctx.String("output")
-	if output == "" {
-		output = "output.pdf"
-	}
-
 	width := ctx.Float64("width")
 	if width == 0 {
 		width = 8.27
@@ -43,15 +35,29 @@ func ConvertEbookToPDF(ctx *cli.Context) int {
 		height = 11.64
 	}
 
-	if err := convert(url, output, width, height); err != nil {
+	ebookscontroller := controllers.NewEbookController()
+	ebooks, err := ebookscontroller.GetEbooks()
+	if err != nil {
 		errorlog(err.Error(), operationName)
 		return 1
+	}
+
+	for _, ebook := range ebooks {
+		if err := convert(ebook, width, height); err != nil {
+			errorlog(err.Error(), operationName)
+			return 1
+		}
+
+		if err := ebookscontroller.SaveEbook(ebook); err != nil {
+			errorlog(err.Error(), operationName)
+			return 1
+		}
 	}
 
 	return 0
 }
 
-func convert(url, output string, width, height float64) (err error) {
+func convert(ebook *models.Ebook, width, height float64) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
@@ -73,9 +79,9 @@ func convert(url, output string, width, height float64) (err error) {
 	}
 	defer conn.Close() // Leaving connections open will leak memory.
 
-	c := cdp.NewClient(conn)
+	cli := cdp.NewClient(conn)
 	// Open a DOMContentEventFired client to buffer this event.
-	domContent, err := c.Page.DOMContentEventFired(ctx)
+	domContent, err := cli.Page.DOMContentEventFired(ctx)
 	if err != nil {
 		return
 	}
@@ -83,13 +89,14 @@ func convert(url, output string, width, height float64) (err error) {
 
 	// Enable events on the Page domain, it's often preferrable to create
 	// event clients before enabling events so that we don't miss any.
-	if err = c.Page.Enable(ctx); err != nil {
+	if err = cli.Page.Enable(ctx); err != nil {
 		return
 	}
 
-	// Create the Navigate arguments with the optional Referrer field set.
-	navArgs := page.NewNavigateArgs(url)
-	nav, err := c.Page.Navigate(ctx, navArgs)
+	htmllocaldir := path.Join(config.Ebook.OriginDir, ebook.Year, ebook.Class, ebook.Name, ebook.Date)
+	// Create the Navigate arguments
+	navArgs := page.NewNavigateArgs(fmt.Sprintf("file://%s", path.Join(htmllocaldir, "index.html")))
+	nav, err := cli.Page.Navigate(ctx, navArgs)
 	if err != nil {
 		return
 	}
@@ -101,37 +108,21 @@ func convert(url, output string, width, height float64) (err error) {
 
 	fmt.Printf("Page loaded with frame ID: %s\n", nav.FrameID)
 
-	// Fetch the document root node. We can pass nil here
-	// since this method only takes optional arguments.
-	doc, err := c.DOM.GetDocument(ctx, nil)
-	if err != nil {
-		return
-	}
-
-	// Get the outer HTML for the page.
-	result, err := c.DOM.GetOuterHTML(ctx, &dom.GetOuterHTMLArgs{
-		NodeID: &doc.Root.NodeID,
-	})
-	if err != nil {
-		return
-	}
-
-	fmt.Printf("HTML: %s\n", result.OuterHTML)
-
+	imgOutput := path.Join(htmllocaldir, "output.jpg")
 	// Capture a screenshot of the current page.
-	screenshotName := "screenshot.jpg"
 	screenshotArgs := page.NewCaptureScreenshotArgs().
 		SetFormat("jpeg").
-		SetQuality(80)
-	screenshot, err := c.Page.CaptureScreenshot(ctx, screenshotArgs)
+		SetQuality(100)
+
+	screenshot, err := cli.Page.CaptureScreenshot(ctx, screenshotArgs)
 	if err != nil {
 		return
 	}
-	if err = ioutil.WriteFile(screenshotName, screenshot.Data, 0644); err != nil {
+	if err = ioutil.WriteFile(imgOutput, screenshot.Data, 0644); err != nil {
 		return
 	}
 
-	fmt.Printf("Saved screenshot: %s\n", screenshotName)
+	fmt.Printf("Saved screenshot: %s\n", imgOutput)
 
 	// Print to PDF
 	printToPDFArgs := page.NewPrintToPDFArgs().
@@ -144,11 +135,24 @@ func convert(url, output string, width, height float64) (err error) {
 		SetPaperWidth(width).
 		SetPaperHeight(height)
 
-	pdfName := output
-	print, _ := c.Page.PrintToPDF(ctx, printToPDFArgs)
-	if err = ioutil.WriteFile(pdfName, print.Data, 0644); err != nil {
+	print, _ := cli.Page.PrintToPDF(ctx, printToPDFArgs)
+	pdfOutput := path.Join(htmllocaldir, "output.pdf")
+	if err = ioutil.WriteFile(pdfOutput, print.Data, 0644); err != nil {
 		return
 	}
 
-	return nil
+	fmt.Printf("Saved pdf: %s\n", pdfOutput)
+
+	// move to dest dir
+	destdir := path.Join(config.Ebook.DestDir, ebook.Year, ebook.Class, ebook.Name)
+	_, err = os.Stat(destdir)
+	if err != nil && os.IsNotExist(err) {
+		err = os.MkdirAll(destdir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = os.Rename(pdfOutput, path.Join(destdir, fmt.Sprintf("%s.pdf", ebook.Date)))
+	return err
 }

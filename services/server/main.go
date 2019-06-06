@@ -33,15 +33,11 @@ func commands() []cli.Command {
 				run(c, jobs.HeIsDeadJim)
 			},
 		},
-		// test error
+		// ebook convert
 		cli.Command{
-			Name:  "ebook_convert_pdf",
+			Name:  "ebook_convert",
 			Usage: "use chrome headless to convert ebook html to pdf",
 			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "url",
-					Usage: "Target url",
-				},
 				cli.Float64Flag{
 					Name:  "width",
 					Usage: "PDF width in inches, default 8.27 (A4)",
@@ -49,10 +45,6 @@ func commands() []cli.Command {
 				cli.Float64Flag{
 					Name:  "height",
 					Usage: "PDF height in inches, default 11.69 (A4)",
-				},
-				cli.Float64Flag{
-					Name:  "output",
-					Usage: "PDF output file name",
 				},
 			},
 			Action: func(c *cli.Context) {
