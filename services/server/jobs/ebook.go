@@ -12,6 +12,7 @@ import (
 	"github.com/ilovelili/dongfeng-jobs/services/server/core/models"
 	"github.com/mafredri/cdp"
 	"github.com/mafredri/cdp/devtool"
+	"github.com/mafredri/cdp/protocol/network"
 	"github.com/mafredri/cdp/protocol/page"
 	"github.com/mafredri/cdp/rpcc"
 	"github.com/micro/cli"
@@ -86,6 +87,16 @@ func convert(ebook *models.Ebook, width, height float64) (err error) {
 		return
 	}
 	defer domContent.Close()
+
+	// Enable the runtime
+	if err = cli.Runtime.Enable(ctx); err != nil {
+		return
+	}
+
+	// Enable the network
+	if err = cli.Network.Enable(ctx, network.NewEnableArgs()); err != nil {
+		return
+	}
 
 	// Enable events on the Page domain, it's often preferrable to create
 	// event clients before enabling events so that we don't miss any.
