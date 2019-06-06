@@ -9,6 +9,7 @@
         }
     },
     "ebook": {
+        "image_load_timeout": 10,
         "origin_dir": "/home/min/Projects/dongfeng/src/github.com/ilovelili/dongfeng-core/services/server/ebook",
         "dest_dir": "/home/min/Projects/test"
     },

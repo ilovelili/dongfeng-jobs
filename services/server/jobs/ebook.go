@@ -112,6 +112,9 @@ func convert(ebook *models.Ebook, width, height float64) (err error) {
 		return
 	}
 
+	// wait till image loaded
+	time.Sleep(time.Duration(config.Ebook.ImageLoadTimeout) * time.Second)
+
 	// Wait until we have a DOMContentEventFired event.
 	if _, err = domContent.Recv(); err != nil {
 		return

@@ -67,8 +67,9 @@ type Services struct {
 
 // Ebook ebook related config
 type Ebook struct {
-	OriginDir string `json:"origin_dir"`
-	DestDir   string `json:"dest_dir"`
+	OriginDir        string `json:"origin_dir"`
+	DestDir          string `json:"dest_dir"`
+	ImageLoadTimeout int64  `json:"image_load_timeout"`
 }
 
 // ServiceMeta service meta data including service discovery specs
