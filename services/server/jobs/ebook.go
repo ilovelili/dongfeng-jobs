@@ -1,11 +1,15 @@
 package jobs
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path"
+	"path/filepath"
+	"strings"
 	"time"
 
 	"github.com/ilovelili/dongfeng-jobs/services/server/core/controllers"
@@ -54,6 +58,21 @@ func ConvertEbookToPDF(ctx *cli.Context) int {
 			return 1
 		}
 	}
+
+	return 0
+}
+
+// MergeEbook merge ebook pdfs into one
+func MergeEbook(ctx *cli.Context) int {
+	operationName := "MergeEbook"
+
+	targetdir := ctx.String("target_dir")
+	if err := merge(targetdir); err != nil {
+		errorlog(err.Error(), operationName)
+		return 1
+	}
+
+	// tbd, move pdf to image server
 
 	return 0
 }
@@ -182,4 +201,50 @@ func convert(ebook *models.Ebook, width, height float64) (err error) {
 
 	err = os.Rename(imgOutput, path.Join(imgdestdir, fmt.Sprintf("%s.jpg", ebook.Date)))
 	return err
+}
+
+func merge(dir string) (err error) {
+	filepathmap := make(map[string][]string)
+
+	err = filepath.Walk(dir, func(filepath string, info os.FileInfo, err error) error {
+		// target
+		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
+			key := path.Dir(filepath)
+			if paths, ok := filepathmap[key]; ok {
+				filepathmap[key] = append(paths, filepath)
+			} else {
+				filepathmap[key] = []string{filepath}
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return
+	}
+
+	_, err = exec.LookPath("pdftk")
+	if err != nil {
+		return err
+	}
+
+	for dir, filepaths := range filepathmap {
+		// https://stackoverflow.com/questions/31467153/golang-failed-exec-command-that-works-in-terminal
+		// cmdline := fmt.Sprintf("pdftk %s cat output merge.pdf", path.Join(filepath, "*.pdf"))
+		pdffiles := strings.Join(filepaths, " ")
+		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, "merge.pdf"))
+		args := strings.Split(cmdline, " ")
+		cmd := exec.Command(args[0], args[1:]...)
+
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
+
+		err = cmd.Run()
+		if err != nil {
+			fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
+			return
+		}
+	}
+
+	return nil
 }
