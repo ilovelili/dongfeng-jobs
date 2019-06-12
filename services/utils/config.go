@@ -68,7 +68,8 @@ type Services struct {
 // Ebook ebook related config
 type Ebook struct {
 	OriginDir        string `json:"origin_dir"`
-	DestDir          string `json:"dest_dir"`
+	PDFDestDir       string `json:"pdf_dest_dir"`
+	ImageDestDir     string `json:"img_dest_dir"`
 	ImageLoadTimeout int64  `json:"image_load_timeout"`
 }
 

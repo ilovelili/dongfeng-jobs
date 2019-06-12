@@ -158,15 +158,28 @@ func convert(ebook *models.Ebook, width, height float64) (err error) {
 	fmt.Printf("Saved pdf: %s\n", pdfOutput)
 
 	// move to dest dir
-	destdir := path.Join(config.Ebook.DestDir, ebook.Year, ebook.Class, ebook.Name)
-	_, err = os.Stat(destdir)
+	pdfdestdir := path.Join(config.Ebook.PDFDestDir, ebook.Year, ebook.Class, ebook.Name)
+	_, err = os.Stat(pdfdestdir)
 	if err != nil && os.IsNotExist(err) {
-		err = os.MkdirAll(destdir, os.ModePerm)
+		err = os.MkdirAll(pdfdestdir, os.ModePerm)
 		if err != nil {
 			return err
 		}
 	}
 
-	err = os.Rename(pdfOutput, path.Join(destdir, fmt.Sprintf("%s.pdf", ebook.Date)))
+	if err = os.Rename(pdfOutput, path.Join(pdfdestdir, fmt.Sprintf("%s.pdf", ebook.Date))); err != nil {
+		return err
+	}
+
+	imgdestdir := path.Join(config.Ebook.ImageDestDir, ebook.Year, ebook.Class, ebook.Name)
+	_, err = os.Stat(imgdestdir)
+	if err != nil && os.IsNotExist(err) {
+		err = os.MkdirAll(imgdestdir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = os.Rename(imgOutput, path.Join(imgdestdir, fmt.Sprintf("%s.jpg", ebook.Date)))
 	return err
 }
