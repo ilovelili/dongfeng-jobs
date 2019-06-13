@@ -270,7 +270,8 @@ func merge() (err error) {
 		}
 
 		// class/name/year.pdf
-		err = os.Rename(path.Join(dir, "merge.pdf"), path.Join(mergedestdir, fmt.Sprintf("%s.pdf", year)))
+		// 电子书_${this.currentName}_${this.currentClass}_${this.currentYear}学年.pdf
+		err = os.Rename(path.Join(dir, "merge.pdf"), path.Join(mergedestdir, fmt.Sprintf("电子书_%s_%s_%s学年.pdf", name, class, year)))
 		if err != nil {
 			return
 		}
@@ -302,7 +303,13 @@ func merge() (err error) {
 	for dir, filepaths := range destfilepathmap {
 		sort.Strings(filepaths)
 		pdffiles := strings.Join(filepaths, " ")
-		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, "ebook.pdf"))
+
+		// move to dest
+		segments := strings.Split(dir, "/")
+		class, name := segments[len(segments)-2], segments[len(segments)-1]
+
+		// 电子书_${this.currentName}_${this.currentClass}_全期间.pdf
+		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, fmt.Sprintf("电子书_%s_%s_全期间.pdf", name, class)))
 		args := strings.Split(cmdline, " ")
 		cmd := exec.Command(args[0], args[1:]...)
 
