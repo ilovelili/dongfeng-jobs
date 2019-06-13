@@ -31,16 +31,6 @@ const (
 func ConvertEbookToPDF(ctx *cli.Context) int {
 	operationName := "ConvertEbookToPDF"
 
-	width := ctx.Float64("width")
-	if width == 0 {
-		width = 8.27
-	}
-
-	height := ctx.Float64("height")
-	if height == 0 {
-		height = 11.64
-	}
-
 	ebookscontroller := controllers.NewEbookController()
 	ebooks, err := ebookscontroller.GetEbooks()
 	if err != nil {
@@ -49,7 +39,7 @@ func ConvertEbookToPDF(ctx *cli.Context) int {
 	}
 
 	for _, ebook := range ebooks {
-		if err := convert(ebook, width, height); err != nil {
+		if err := convert(ebook); err != nil {
 			errorlog(err.Error(), operationName)
 			return 1
 		}
@@ -74,7 +64,7 @@ func MergeEbook(ctx *cli.Context) int {
 	return 0
 }
 
-func convert(ebook *models.Ebook, width, height float64) (err error) {
+func convert(ebook *models.Ebook) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
@@ -162,8 +152,8 @@ func convert(ebook *models.Ebook, width, height float64) (err error) {
 		SetMarginBottom(0).
 		SetMarginLeft(0).
 		SetMarginRight(0).
-		SetPaperWidth(width).
-		SetPaperHeight(height)
+		SetPaperWidth(config.Ebook.Width).
+		SetPaperHeight(config.Ebook.Height)
 
 	print, _ := cli.Page.PrintToPDF(ctx, printToPDFArgs)
 	pdfOutput := path.Join(htmllocaldir, "output.pdf")

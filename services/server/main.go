@@ -37,16 +37,6 @@ func commands() []cli.Command {
 		cli.Command{
 			Name:  "ebook_convert",
 			Usage: "use chrome headless to convert ebook html to pdf",
-			Flags: []cli.Flag{
-				cli.Float64Flag{
-					Name:  "width",
-					Usage: "PDF width in inches, default 8.27 (A4)",
-				},
-				cli.Float64Flag{
-					Name:  "height",
-					Usage: "PDF height in inches, default 11.69 (A4)",
-				},
-			},
 			Action: func(c *cli.Context) {
 				run(c, jobs.ConvertEbookToPDF)
 			},
