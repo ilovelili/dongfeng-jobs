@@ -9,6 +9,7 @@ import (
 	"os/exec"
 	"path"
 	"path/filepath"
+	"sort"
 	"strings"
 	"time"
 
@@ -66,14 +67,10 @@ func ConvertEbookToPDF(ctx *cli.Context) int {
 func MergeEbook(ctx *cli.Context) int {
 	operationName := "MergeEbook"
 
-	targetdir := ctx.String("target_dir")
-	if err := merge(targetdir); err != nil {
+	if err := merge(); err != nil {
 		errorlog(err.Error(), operationName)
 		return 1
 	}
-
-	// tbd, move pdf to image server
-
 	return 0
 }
 
@@ -203,13 +200,23 @@ func convert(ebook *models.Ebook, width, height float64) (err error) {
 	return err
 }
 
-func merge(dir string) (err error) {
-	filepathmap := make(map[string][]string)
+func merge() (err error) {
+	// check if pdftk installed or not
+	_, err = exec.LookPath("pdftk")
+	if err != nil {
+		return
+	}
 
-	err = filepath.Walk(dir, func(filepath string, info os.FileInfo, err error) error {
+	filepathmap := make(map[string][]string)
+	err = filepath.Walk(config.Ebook.MergeTargetDir, func(filepath string, info os.FileInfo, err error) error {
 		// target
 		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
 			key := path.Dir(filepath)
+			// ignore the dest file
+			if strings.Index(key, config.Ebook.MergeDestDir) > -1 {
+				return nil
+			}
+
 			if paths, ok := filepathmap[key]; ok {
 				filepathmap[key] = append(paths, filepath)
 			} else {
@@ -223,12 +230,17 @@ func merge(dir string) (err error) {
 		return
 	}
 
-	_, err = exec.LookPath("pdftk")
-	if err != nil {
-		return err
+	for dir := range filepathmap {
+		segments := strings.Split(dir, "/")
+		class, name := segments[len(segments)-2], segments[len(segments)-1]
+		mergedestdir := path.Join(config.Ebook.MergeDestDir, class, name)
+		// first clear the merge dir
+		os.RemoveAll(mergedestdir)
 	}
 
 	for dir, filepaths := range filepathmap {
+		// sort pdf by date
+		sort.Strings(filepaths)
 		// https://stackoverflow.com/questions/31467153/golang-failed-exec-command-that-works-in-terminal
 		// cmdline := fmt.Sprintf("pdftk %s cat output merge.pdf", path.Join(filepath, "*.pdf"))
 		pdffiles := strings.Join(filepaths, " ")
@@ -244,7 +256,65 @@ func merge(dir string) (err error) {
 			fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
 			return
 		}
+
+		// move to dest
+		segments := strings.Split(dir, "/")
+		year, class, name := segments[len(segments)-3], segments[len(segments)-2], segments[len(segments)-1]
+		mergedestdir := path.Join(config.Ebook.MergeDestDir, class, name)
+		_, err = os.Stat(mergedestdir)
+		if err != nil && os.IsNotExist(err) {
+			err = os.MkdirAll(mergedestdir, os.ModePerm)
+			if err != nil {
+				return err
+			}
+		}
+
+		// class/name/year.pdf
+		err = os.Rename(path.Join(dir, "merge.pdf"), path.Join(mergedestdir, fmt.Sprintf("%s.pdf", year)))
+		if err != nil {
+			return
+		}
 	}
 
-	return nil
+	// loop dest dir and merge again to generate the full year ebook
+	destfilepathmap := make(map[string][]string)
+	err = filepath.Walk(config.Ebook.MergeDestDir, func(filepath string, info os.FileInfo, err error) error {
+		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
+			key := path.Dir(filepath)
+			// ignore the target file
+			// if strings.Index(key, config.Ebook.MergeTargetDir) > -1 {
+			// 	return nil
+			// }
+
+			if paths, ok := destfilepathmap[key]; ok {
+				destfilepathmap[key] = append(paths, filepath)
+			} else {
+				destfilepathmap[key] = []string{filepath}
+			}
+		}
+		return nil
+	})
+
+	if err != nil {
+		return
+	}
+
+	for dir, filepaths := range destfilepathmap {
+		sort.Strings(filepaths)
+		pdffiles := strings.Join(filepaths, " ")
+		cmdline := fmt.Sprintf("pdftk %s cat output %s", pdffiles, path.Join(dir, "ebook.pdf"))
+		args := strings.Split(cmdline, " ")
+		cmd := exec.Command(args[0], args[1:]...)
+
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
+
+		err = cmd.Run()
+		if err != nil {
+			fmt.Println(fmt.Sprint(err) + ": " + stderr.String())
+			return
+		}
+	}
+
+	return
 }

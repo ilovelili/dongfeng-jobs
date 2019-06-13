@@ -55,12 +55,6 @@ func commands() []cli.Command {
 		cli.Command{
 			Name:  "ebook_merge",
 			Usage: "use pdftk to merge ebook pdfs into one file",
-			Flags: []cli.Flag{
-				cli.StringFlag{
-					Name:  "target_dir",
-					Usage: "target directory",
-				},
-			},
 			Action: func(c *cli.Context) {
 				run(c, jobs.MergeEbook)
 			},
