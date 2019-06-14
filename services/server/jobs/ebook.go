@@ -23,10 +23,6 @@ import (
 	"github.com/micro/cli"
 )
 
-const (
-	chromeDevTool = "http://127.0.0.1:9222"
-)
-
 // ConvertEbookToPDF test headless chrome
 func ConvertEbookToPDF(ctx *cli.Context) int {
 	operationName := "ConvertEbookToPDF"
@@ -67,6 +63,11 @@ func MergeEbook(ctx *cli.Context) int {
 func convert(ebook *models.Ebook) (err error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
+
+	chromeDevTool := os.Getenv("CHROME_DEV_TOOL")
+	if chromeDevTool == "" {
+		chromeDevTool = "http://127.0.0.1:9222"
+	}
 
 	// Use the DevTools HTTP/JSON API to manage targets (e.g. pages, webworkers).
 	devt := devtool.New(chromeDevTool)
