@@ -1,0 +1,50 @@
+module github.com/ilovelili/dongfeng-jobs
+
+go 1.12
+
+require (
+	github.com/armon/go-metrics v0.0.0-20180917152333-f0300d1749da
+	github.com/go-log/log v0.1.0
+	github.com/go-sql-driver/mysql v1.4.1
+	github.com/gocarina/gocsv v0.0.0-20181213162136-af1d9380204a
+	github.com/golang/protobuf v1.2.0
+	github.com/google/btree v1.0.0
+	github.com/google/uuid v1.1.0
+	github.com/gorilla/websocket v1.4.0
+	github.com/hashicorp/consul v1.4.1
+	github.com/hashicorp/errwrap v1.0.0
+	github.com/hashicorp/go-cleanhttp v0.5.0
+	github.com/hashicorp/go-immutable-radix v1.0.0
+	github.com/hashicorp/go-msgpack v0.5.3
+	github.com/hashicorp/go-multierror v1.0.0
+	github.com/hashicorp/go-rootcerts v1.0.0
+	github.com/hashicorp/go-sockaddr v1.0.1
+	github.com/hashicorp/golang-lru v0.5.0
+	github.com/hashicorp/memberlist v0.1.3
+	github.com/hashicorp/serf v0.8.2
+	github.com/ilovelili/dongfeng-logger v0.0.0-20190124052411-d26a6184d0e2
+	github.com/konsorten/go-windows-terminal-sequences v1.0.1
+	github.com/mafredri/cdp v0.23.2
+	github.com/micro/cli v0.0.0-20181223203424-1b0c9793c300
+	github.com/micro/go-log v0.0.0-20170512141327-cbfa9447f9b6
+	github.com/micro/go-micro v0.22.1
+	github.com/micro/go-plugins v0.21.0
+	github.com/micro/go-rcache v0.0.0-20180418165751-a581a57b5133
+	github.com/micro/h2c v1.0.0
+	github.com/micro/mdns v0.0.0-20181201230301-9c3770d4057a
+	github.com/micro/util v0.0.0-20181115195001-2d4f591dc538
+	github.com/miekg/dns v1.1.3
+	github.com/mitchellh/go-homedir v1.0.0
+	github.com/mitchellh/hashstructure v1.0.0
+	github.com/mitchellh/mapstructure v1.1.2
+	github.com/olivere/dapper v0.0.0-20160315092308-11d01232a968
+	github.com/petar/GoLLRB v0.0.0-20130427215148-53be0d36a84c
+	github.com/pkg/errors v0.8.1
+	github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529
+	github.com/sirupsen/logrus v1.3.0
+	golang.org/x/crypto v0.0.0-20190123085648-057139ce5d2b
+	golang.org/x/net v0.0.0-20190125091013-d26f9f9a57f3
+	golang.org/x/sys v0.0.0-20190124100055-b90733256f2e
+	golang.org/x/text v0.3.0
+	google.golang.org/appengine v1.4.0
+)
