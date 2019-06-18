@@ -37,18 +37,19 @@ func (r *RecipeRepository) Upsert(recipes []*models.Recipe) (err error) {
 
 	// upsert by loop
 	for _, recipe := range recipes {
-		query := Table("recipes").Alias("r").Project("r.id").
+		query := Table("recipes").Alias("r").
 			Where().
 			Eq("r.name", recipe.Name).
 			Eq("r.ingredient_id", recipe.Ingredient).
 			Sql()
 
-		var id int64
-		err = r.session.Find(query, nil).Scalar(&id)
-		if err != nil || 0 == id {
+		var _r *models.Recipe
+		err = r.session.Find(query, nil).Single(&_r)
+		if err != nil || 0 == _r.ID {
 			err = r.session.InsertTx(tx, recipe)
 		} else {
-			recipe.ID = id
+			recipe.ID = _r.ID
+			recipe.UnitAmount = _r.UnitAmount
 			err = r.session.UpdateTx(tx, recipe)
 		}
 
