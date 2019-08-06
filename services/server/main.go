@@ -8,8 +8,7 @@ import (
 	"github.com/ilovelili/dongfeng-jobs/services/server/jobs"
 	logger "github.com/ilovelili/dongfeng-logger"
 	"github.com/micro/cli"
-	"github.com/micro/go-micro/cmd"
-	_ "github.com/micro/go-plugins/registry/kubernetes"
+	"github.com/micro/go-micro/cmd"	
 )
 
 func commands() []cli.Command {
