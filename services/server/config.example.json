@@ -2,7 +2,7 @@
     "services": {  
         "mysql": {
             "host": "mysql:3306",
-            "database": "dongfeng_core",
+            "database": "dongfeng_zhonglou",
             "user": "user",
             "password": "password",
             "allow_debug": true
