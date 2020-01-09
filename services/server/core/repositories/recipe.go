@@ -43,7 +43,7 @@ func (r *RecipeRepository) Upsert(recipes []*models.Recipe) (err error) {
 			Eq("r.ingredient_id", recipe.Ingredient).
 			Sql()
 
-		var _r *models.Recipe
+		var _r models.Recipe
 		err = r.session.Find(query, nil).Single(&_r)
 		if err != nil || 0 == _r.ID {
 			err = r.session.InsertTx(tx, recipe)
