@@ -35,6 +35,11 @@ func MenuUpload(ctx *cli.Context) int {
 	}
 
 	filepath := ctx.String("menu_file_path")
+	if _, err := os.Stat(filepath); os.IsNotExist(err) {
+		systemLog("no file", operation)
+		return 0
+	}
+
 	file, err := os.Open(filepath)
 	if err != nil {
 		errorLog(fmt.Sprintf("Error: failed to open %s", filepath), operation)
