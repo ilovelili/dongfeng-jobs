@@ -25,14 +25,5 @@ func (r *Recipe) FirstOrCreate(recipe *model.Recipe) (*model.Recipe, error) {
 
 // Save save recipe
 func (r *Recipe) Save(recipe *model.Recipe) error {
-	if err := db().Where("name = ?", recipe.Name).First(&recipe); err == nil {
-		// recipe found, skip (no need to insert save menu)
-		return nil
-	}
-	return db().Save(recipe).Error
-}
-
-// Update update recipe
-func (r *Recipe) Update(recipe *model.Recipe) error {
 	return db().Save(&recipe).Error
 }
