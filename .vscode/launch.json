@@ -12,8 +12,7 @@
             "program": "${fileDirname}",
             "env": {},
             "args": [
-                "recipe_nutrition_upload",
-                "--recipe_nutrition_file_dir=/home/min/Projects/lx/src/github.com/ilovelili/dongfeng-sunshine-recipe-nutrition-crawler/output"
+                "ebook_merge",                
             ]
         }
     ]

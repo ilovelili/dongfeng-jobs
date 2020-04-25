@@ -110,8 +110,18 @@ func convert(ebook *model.Ebook) (err error) {
 	}
 
 	htmllocaldir := path.Join(config.Ebook.OriginDir, year, class, name, date)
+	_, err = os.Stat(htmllocaldir)
+	if err != nil && os.IsNotExist(err) {
+		err = os.MkdirAll(htmllocaldir, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
 	// Create the Navigate arguments
-	navArgs := page.NewNavigateArgs(fmt.Sprintf("file://%s", path.Join(htmllocaldir, "index.html")))
+	url := fmt.Sprintf("file://%s", path.Join(htmllocaldir, "index.html"))
+	fmt.Println(url)
+	navArgs := page.NewNavigateArgs(url)
 	nav, err := cli.Page.Navigate(ctx, navArgs)
 	if err != nil {
 		return

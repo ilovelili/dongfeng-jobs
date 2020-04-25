@@ -25,9 +25,9 @@ func db() *gorm.DB {
 		db, err := gorm.Open("mysql", connectionString)
 		if err == nil {
 			if config.DataBase.Debug {
-				instance = db.Debug()
+				instance = db.Set("gorm:auto_preload", true).Debug().LogMode(true)
 			} else {
-				instance = db
+				instance = db.Set("gorm:auto_preload", true).LogMode(false)
 			}
 		}
 	})

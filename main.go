@@ -18,7 +18,7 @@ const (
 func commands() []cli.Command {
 	return []cli.Command{
 		// test
-		cli.Command{
+		{
 			Name:  "test",
 			Usage: "test cmd",
 			Action: func(c *cli.Context) {
@@ -29,7 +29,7 @@ func commands() []cli.Command {
 			},
 		},
 		// test error
-		cli.Command{
+		{
 			Name:  "test_error",
 			Usage: "test cmd to return error",
 			Action: func(c *cli.Context) {
@@ -37,7 +37,7 @@ func commands() []cli.Command {
 			},
 		},
 		// ebook convert
-		cli.Command{
+		{
 			Name:  "ebook_convert",
 			Usage: "use chrome headless to convert ebook html to pdf",
 			Action: func(c *cli.Context) {
@@ -45,7 +45,7 @@ func commands() []cli.Command {
 			},
 		},
 		// ebook merge
-		cli.Command{
+		{
 			Name:  "ebook_merge",
 			Usage: "use pdftk to merge ebook pdfs into one file",
 			Action: func(c *cli.Context) {
@@ -53,7 +53,7 @@ func commands() []cli.Command {
 			},
 		},
 		// menu csv file upload
-		cli.Command{
+		{
 			Name:  "menu_upload",
 			Usage: "menu csv file upload",
 			Flags: []cli.Flag{
@@ -66,7 +66,7 @@ func commands() []cli.Command {
 			},
 		},
 		// menu csv file upload
-		cli.Command{
+		{
 			Name:  "recipe_upload",
 			Usage: "recipe excel file upload",
 			Flags: []cli.Flag{
@@ -79,7 +79,7 @@ func commands() []cli.Command {
 			},
 		},
 		// recipe nutrition csv file upload
-		cli.Command{
+		{
 			Name:  "recipe_nutrition_upload",
 			Usage: "recipe nutrition csv file upload",
 			Flags: []cli.Flag{
