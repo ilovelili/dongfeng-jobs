@@ -9,7 +9,7 @@ require (
 	github.com/ilovelili/logger v0.0.0-20190923035736-5b5242727684
 	github.com/jinzhu/gorm v1.9.12
 	github.com/json-iterator/go v1.1.7 // indirect
-	github.com/mafredri/cdp v0.24.2
+	github.com/mafredri/cdp v0.28.0
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.8.2
 	github.com/nats-io/jwt v0.2.12 // indirect

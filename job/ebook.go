@@ -137,22 +137,6 @@ func convert(ebook *model.Ebook) (err error) {
 
 	fmt.Printf("Page loaded with frame ID: %s\n", nav.FrameID)
 
-	imgOutput := path.Join(htmllocaldir, "output.jpg")
-	// Capture a screenshot of the current page.
-	screenshotArgs := page.NewCaptureScreenshotArgs().
-		SetFormat("jpeg").
-		SetQuality(100)
-
-	screenshot, err := cli.Page.CaptureScreenshot(ctx, screenshotArgs)
-	if err != nil {
-		return
-	}
-	if err = ioutil.WriteFile(imgOutput, screenshot.Data, 0644); err != nil {
-		return
-	}
-
-	fmt.Printf("Saved screenshot: %s\n", imgOutput)
-
 	// Print to PDF
 	printToPDFArgs := page.NewPrintToPDFArgs().
 		SetLandscape(false).
@@ -182,20 +166,7 @@ func convert(ebook *model.Ebook) (err error) {
 		}
 	}
 
-	if err = os.Rename(pdfOutput, path.Join(pdfdestdir, fmt.Sprintf("%s.pdf", ebook.Date))); err != nil {
-		return err
-	}
-
-	imgdestdir := path.Join(config.Ebook.ImageDestDir, year, class, name)
-	_, err = os.Stat(imgdestdir)
-	if err != nil && os.IsNotExist(err) {
-		err = os.MkdirAll(imgdestdir, os.ModePerm)
-		if err != nil {
-			return err
-		}
-	}
-
-	err = os.Rename(imgOutput, path.Join(imgdestdir, fmt.Sprintf("%s.jpg", ebook.Date)))
+	err = os.Rename(pdfOutput, path.Join(pdfdestdir, fmt.Sprintf("%s.pdf", ebook.Date)))
 	return err
 }
 
