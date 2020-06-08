@@ -148,7 +148,11 @@ func convert(ebook *model.Ebook) (err error) {
 		SetPaperWidth(config.Ebook.Width).
 		SetPaperHeight(config.Ebook.Height)
 
-	print, _ := cli.Page.PrintToPDF(ctx, printToPDFArgs)
+	print, err := cli.Page.PrintToPDF(ctx, printToPDFArgs)
+	if err != nil {
+		return
+	}
+
 	pdfOutput := path.Join(htmllocaldir, "output.pdf")
 	if err = ioutil.WriteFile(pdfOutput, print.Data, 0644); err != nil {
 		return
