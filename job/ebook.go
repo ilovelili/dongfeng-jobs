@@ -180,7 +180,7 @@ func merge() (err error) {
 	filepathmap := make(map[string][]string)
 	err = filepath.Walk(config.Ebook.MergeTargetDir, func(filepath string, info os.FileInfo, err error) error {
 		// target
-		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" {
+		if !info.IsDir() && path.Ext(info.Name()) == ".pdf" && info.Size() > 0 {
 			key := path.Dir(filepath)
 			// ignore the dest file
 			if strings.Index(key, config.Ebook.MergeDestDir) > -1 {
