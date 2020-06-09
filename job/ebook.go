@@ -59,6 +59,17 @@ func MergeEbook(ctx *cli.Context) int {
 func convert(ebook *model.Ebook) (err error) {
 	year, class, name, date := ebook.Pupil.Class.Year, ebook.Pupil.Class.Name, ebook.Pupil.Name, ebook.Date
 
+	htmllocaldir := path.Join(config.Ebook.OriginDir, year, class, name, date)
+	_, err = os.Stat(htmllocaldir)
+	if err != nil && os.IsNotExist(err) {
+		// original dir not exist, which is ok
+		return nil
+		// err = os.MkdirAll(htmllocaldir, os.ModePerm)
+		// if err != nil {
+		// 	return err
+		// }
+	}
+
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Minute)
 	defer cancel()
 
@@ -107,15 +118,6 @@ func convert(ebook *model.Ebook) (err error) {
 	// event clients before enabling events so that we don't miss any.
 	if err = cli.Page.Enable(ctx); err != nil {
 		return
-	}
-
-	htmllocaldir := path.Join(config.Ebook.OriginDir, year, class, name, date)
-	_, err = os.Stat(htmllocaldir)
-	if err != nil && os.IsNotExist(err) {
-		err = os.MkdirAll(htmllocaldir, os.ModePerm)
-		if err != nil {
-			return err
-		}
 	}
 
 	// Create the Navigate arguments
