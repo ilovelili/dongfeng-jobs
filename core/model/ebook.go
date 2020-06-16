@@ -26,3 +26,11 @@ type Class struct {
 	Name      string `gorm:"unique_index:idx_year_name" json:"name" csv:"班级"`
 	CreatedBy string `json:"created_by" csv:"-"`
 }
+
+// TemplatePreview template preview entity
+type TemplatePreview struct {
+	BaseModel
+	Name      string `gorm:"unique_index"`
+	Hash      string `gorm:"unique_index" json:"-"`
+	Converted bool   `json:"-"`
+}

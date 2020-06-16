@@ -30,3 +30,21 @@ func (r *Ebook) SetConverted(ebook *model.Ebook) error {
 	_ebook.Converted = true
 	return db().Model(&model.Ebook{}).Save(_ebook).Error
 }
+
+// FindAllTemplatePreviews find all template previews
+func (r *Ebook) FindAllTemplatePreviews() ([]*model.TemplatePreview, error) {
+	templatePreviews := []*model.TemplatePreview{}
+	err := db().Where("template_previews.converted = 0").Find(&templatePreviews).Error
+	return templatePreviews, err
+}
+
+// SetTemplatePreviewsConverted set template preview convert flag to true
+func (r *Ebook) SetTemplatePreviewsConverted(templatePreview *model.TemplatePreview) error {
+	_templatePreview := new(model.TemplatePreview)
+	if err := db().Where("template_previews.name = ?", templatePreview.Name).Find(&_templatePreview).Error; err != nil {
+		return err
+	}
+
+	_templatePreview.Converted = true
+	return db().Model(&model.TemplatePreview{}).Save(_templatePreview).Error
+}

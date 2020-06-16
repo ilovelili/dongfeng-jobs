@@ -36,6 +36,14 @@ func commands() []cli.Command {
 				run(c, job.HeIsDeadJim)
 			},
 		},
+		// template convert
+		{
+			Name:  "template_convert",
+			Usage: "use chrome headless to convert template html to pdf",
+			Action: func(c *cli.Context) {
+				run(c, job.ConvertTemplatePreviewToPDF)
+			},
+		},
 		// ebook convert
 		{
 			Name:  "ebook_convert",

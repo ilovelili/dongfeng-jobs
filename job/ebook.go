@@ -22,7 +22,7 @@ import (
 	"github.com/micro/cli"
 )
 
-// ConvertEbookToPDF test headless chrome
+// ConvertEbookToPDF convert ebook to pdf
 func ConvertEbookToPDF(ctx *cli.Context) int {
 	operation := "ConvertEbookToPDF"
 	ebooks, err := ebooksRepo.FindAll()
